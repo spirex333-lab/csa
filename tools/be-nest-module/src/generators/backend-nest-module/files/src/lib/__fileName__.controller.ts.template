@@ -1,0 +1,21 @@
+import { Controller, Inject, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@workspace/auth/lib/auth.guard';
+import { CRUDController } from '@workspace/be-commons';
+import { <%= dtoName %> } from '<%= dtoImportPath %>';
+import { <%= updateDtoName %> } from '<%= updateDtoImportPath %>';
+import { <%= className %>Service } from './<%= fileName %>.service';
+
+@UseGuards(AuthGuard)
+@Controller('<%= route %>')
+export class <%= className %>Controller extends CRUDController<<%= dtoName %>> {
+  constructor(
+    @Inject(<%= className %>Service)
+    private readonly <%= propertyName %>Service: <%= className %>Service
+  ) {
+    super(
+      <%= propertyName %>Service,
+      <%= dtoName %> as any,
+      <%= updateDtoName %> as any
+    );
+  }
+}

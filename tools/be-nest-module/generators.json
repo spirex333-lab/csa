@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "backend-nest-module": {
+      "factory": "./src/generators/backend-nest-module/backend-nest-module",
+      "schema": "./src/generators/backend-nest-module/schema.json",
+      "description": "Scaffold a backend NestJS module library."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "<%= projectName %>",
+  "$schema": "<%= offsetFromRoot %>node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "<%= sourceRoot %>",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
+  "tags": [],
+  "targets": {}
+}

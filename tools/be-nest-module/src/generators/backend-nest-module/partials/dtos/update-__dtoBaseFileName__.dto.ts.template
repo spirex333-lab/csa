@@ -1,0 +1,6 @@
+export class <%= updateDtoName %> {
+<% if (relatedEntityIdProperty) { %>
+  <%= relatedEntityIdProperty %>?: string | null;
+<% } %>
+  // TODO: set optional fields for updates
+}

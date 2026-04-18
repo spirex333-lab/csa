@@ -1,0 +1,7 @@
+# change-now
+
+This library was generated with the `backend-nest-module` workspace generator.
+
+## Usage
+
+Run `nx graph` to confirm the project appears in the workspace, then develop your module logic under `libs/backend/change-now`.

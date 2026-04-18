@@ -1,0 +1,77 @@
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/apps/**/.next
+/apps/**/out
+**/coverage
+
+# Dependencies
+/node_modules
+/.pnpm-store
+
+# Environment variables
+*.env*
+.env
+.env.*
+!*.env.example
+meta
+# Logs
+npm-debug.log*
+yarn-error.log
+epnpm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+.run-logs/
+
+# Test & cache artifacts
+/.nx/cache
+/.nx/workspace-data
+/tmp
+**/.turbo
+**/.eslintcache
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+/.idea
+/.vs
+/.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Tooling artifacts
+/.cursor
+/.cursor/*
+/.cursorignore
+.nyc_output
+*.tsbuildinfo
+
+# Verdaccio storage
+/.verdaccio/storage
+
+# Uploads or generated content
+/uploads
+
+# Misc
+/connect.lock
+/libpeerconnection.log
+/testem.log
+/typings
+
+# Build outputs from Nx plugin
+/tools/be-nest-module/dist
+**/node_modules
+storage
+
+storybook-static
+*.out
+./**/*.out

@@ -1,0 +1,9 @@
+{
+  "name": "eds-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/eds/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project ui --web",
+  "targets": {}
+}

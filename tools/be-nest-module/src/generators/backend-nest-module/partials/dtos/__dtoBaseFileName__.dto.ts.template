@@ -1,0 +1,5 @@
+import { <%= createDtoName %> } from './create-<%= dtoBaseFileName %>.dto';
+
+export class <%= dtoName %> extends <%= createDtoName %> {
+  id!: string;
+}

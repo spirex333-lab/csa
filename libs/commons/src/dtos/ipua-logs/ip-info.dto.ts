@@ -1,0 +1,85 @@
+import { BaseDTO } from '../base.dto';
+
+export class IPUALogIPInfoDTO extends BaseDTO<IPUALogIPInfoDTO> {
+    public ip!: string;
+    public rir!: string;
+    public is_bogon!: boolean;
+    public is_mobile!: boolean;
+    public is_crawler!: boolean;
+    public is_datacenter!: boolean;
+    public is_tor!: boolean;
+    public is_proxy!: boolean;
+    public is_vpn!: boolean;
+    public is_abuser!: boolean;
+    public company!: {
+      name: string;
+      abuser_score: string;
+      domain: string;
+      type: string;
+      network: string;
+      whois: string;
+    };
+    public abuse!: {
+      name: string;
+      address: string;
+      email: string;
+      phone: string;
+    };
+    public asn!: {
+      asn: number;
+      abuser_score: string;
+      route: string;
+      descr: string;
+      country: string;
+      active: boolean;
+      org: string;
+      domain: string;
+      abuse: string;
+      type: string;
+      updated: string;
+      rir: string;
+      whois: string;
+    };
+    public location!: {
+      continent: string;
+      country: string;
+      country_code: string;
+      state: string;
+      city: string;
+      latitude: number;
+      longitude: number;
+      zip: string;
+      timezone: string;
+      local_time: string;
+      local_time_unix: number;
+      is_dst: boolean;
+    };
+    public elapsed_ms!: number;
+  // public ip!: string;
+  // public city!: string;
+  // public region!: string;
+  // public country!: string;
+  // public loc!: string;
+  // public org!: string;
+  // public postal!: string;
+  // public timezone!: string;
+  // public readme!: string;
+  // public query!: string;
+  // public status!: string;
+  // public continent!: string;
+  // public continentCode!: string;
+  // public countryCode!: string;
+  // public regionName!: string;
+  // public district!: string;
+  // public zip!: string;
+  // public lat!: number;
+  // public lon!: number;
+  // public offset!: number;
+  // public currency!: string;
+  // public isp!: string;
+  // public as!: string;
+  // public asname!: string;
+  // public mobile!: boolean;
+  // public proxy!: boolean;
+  // public hosting!: false;
+}

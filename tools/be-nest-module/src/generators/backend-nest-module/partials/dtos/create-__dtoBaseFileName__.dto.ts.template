@@ -1,0 +1,9 @@
+import { BaseDTO } from '../base.dto';
+
+export class <%= createDtoName %> extends BaseDTO<<%= createDtoName %>> {
+<% if (relatedEntityIdProperty) { %>
+  <%= relatedEntityIdProperty %>?: string;
+<% } else { %>
+  // TODO: add DTO fields
+<% } %>
+}

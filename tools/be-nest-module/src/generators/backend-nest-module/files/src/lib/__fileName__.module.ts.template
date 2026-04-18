@@ -1,0 +1,21 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '@workspace/auth';
+import { <%= entityName %> } from '<%= entityImportPath %>';
+<% if (relatedEntityName) { %>import { <%= relatedEntityName %> } from '<%= relatedEntityImportPath %>';
+<% } %>import { <%= className %>Controller } from './<%= fileName %>.controller';
+import { <%= className %>Service } from './<%= fileName %>.service';
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([
+      <%= entityName %><% if (relatedEntityName) { %>,
+      <%= relatedEntityName %><% } %>
+    ]),
+    AuthModule,
+  ],
+  controllers: [<%= className %>Controller],
+  providers: [<%= className %>Service],
+  exports: [<%= className %>Service],
+})
+export class <%= className %>Module {}

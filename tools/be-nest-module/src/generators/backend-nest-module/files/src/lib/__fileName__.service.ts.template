@@ -1,0 +1,48 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import {
+  CRUDService,
+  CRUDServiceCreateOpts,
+  CRUDServiceUpdateOpts,
+} from '@workspace/be-commons';
+import { <%= entityName %> } from '<%= entityImportPath %>';
+import { Repository } from 'typeorm';
+<% if (relatedEntityName) { %>import { <%= relatedEntityName %> } from '<%= relatedEntityImportPath %>';
+<% } %>
+@Injectable()
+export class <%= className %>Service extends CRUDService<<%= entityName %>> {
+  constructor(
+    @InjectRepository(<%= entityName %>)
+    private readonly <%= propertyName %>Repository: Repository<<%= entityName %>>
+  ) {
+    super(<%= propertyName %>Repository);
+  }
+<% if (relatedEntityName) { %>
+  override async create(opts: CRUDServiceCreateOpts<<%= entityName %>>) {
+    const { <%= relatedEntityIdProperty %>, ...rest } = (opts.dto ?? {}) as Record<string, unknown>;
+    const dto: Partial<<%= entityName %>> = {
+      ...rest,
+      <%= relatedEntityField %>: <%= relatedEntityIdProperty %>
+        ? ({ id: <%= relatedEntityIdProperty %> } as Partial<<%= relatedEntityName %>>)
+        : undefined,
+    };
+
+    return super.create({ ...opts, dto });
+  }
+
+  override async update(opts: CRUDServiceUpdateOpts<<%= entityName %>>) {
+    const { <%= relatedEntityIdProperty %>, ...rest } = (opts.dto ?? {}) as Record<string, unknown>;
+    const dto: Partial<<%= entityName %>> = {
+      ...rest,
+      <%= relatedEntityField %>:
+        <%= relatedEntityIdProperty %> !== undefined
+          ? <%= relatedEntityIdProperty %>
+            ? ({ id: <%= relatedEntityIdProperty %> } as Partial<<%= relatedEntityName %>>)
+            : null
+          : undefined,
+    };
+
+    return super.update({ ...opts, dto });
+  }
+<% } %>
+}

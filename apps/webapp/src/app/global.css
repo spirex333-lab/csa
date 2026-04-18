@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --splash-surface: #f9f9f9;
+    --splash-border: #cccccc;
+    --splash-text: #000000;
+    --splash-muted: #70797e;
+    --splash-icon: #999999;
+    --splash-fprint-gradient: linear-gradient(
+      180deg,
+      rgba(182, 194, 205, 0.1) 0%,
+      rgba(255, 255, 255, 0) 185.16%
+    );
+    --type-font-display: 'Lexend', sans-serif;
+    --type-size-brand: 42px;
+    --type-line-brand: 52px;
+    --type-size-body: 16px;
+    --type-line-body: 20px;
+    --type-size-label: 13px;
+    --type-line-label: 21px;
+    --type-size-title: 17px;
+    --type-line-title: 21px;
+    --type-weight-regular: 400;
+    --type-weight-medium: 500;
+    --type-weight-semibold: 600;
+    --type-weight-bold: 700;
+
+    --home-surface: #f9f9f9;
+    --home-border: #cccccc;
+    --home-title: #000000;
+    --home-card-title: #333333;
+    --home-state-on: #2e2e2e;
+    --home-state-off: #7d7d7d;
+    --home-card-subtitle: #a7a7a7;
+    --home-icon-on: #65d986;
+    --home-icon-off: #d6d6d6;
+
+    --camera-border-strong: #2e2e2e;
+    --camera-border-muted: #a7a7a7;
+    --camera-accent: #65d986;
+    --camera-track: #a45353;
+    --camera-cross: #d9d9d9;
+    --camera-surface: #f9f9f9;
+    --camera-danger: #f32929;
+    --camera-radius-lg: 20px;
+    --camera-radius-pill: 100px;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--type-font-display);
+    background: var(--splash-surface);
+    color: var(--splash-text);
+  }
+}
+
+@layer components {
+  .type-splash-brand {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-brand);
+    line-height: var(--type-line-brand);
+    font-weight: var(--type-weight-bold);
+    color: var(--splash-text);
+  }
+
+  .type-splash-subtitle {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-body);
+    line-height: var(--type-line-body);
+    font-weight: var(--type-weight-regular);
+    color: var(--splash-muted);
+  }
+
+  .type-splash-hint {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-body);
+    line-height: var(--type-line-body);
+    font-weight: var(--type-weight-regular);
+    color: var(--splash-muted);
+  }
+
+  .type-home-hero {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-brand);
+    line-height: var(--type-line-brand);
+    font-weight: var(--type-weight-bold);
+    color: var(--home-title);
+  }
+
+  .type-home-tab-active {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-title);
+    line-height: var(--type-line-title);
+    font-weight: var(--type-weight-semibold);
+    color: var(--home-title);
+  }
+
+  .type-home-tab {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-title);
+    line-height: var(--type-line-title);
+    font-weight: var(--type-weight-regular);
+    color: var(--home-title);
+  }
+
+  .type-home-card-title {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-title);
+    line-height: var(--type-line-title);
+    font-weight: var(--type-weight-semibold);
+    color: var(--home-card-title);
+  }
+
+  .type-home-card-subtitle {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-label);
+    line-height: var(--type-line-label);
+    font-weight: var(--type-weight-regular);
+    color: var(--home-card-subtitle);
+  }
+
+  .type-home-state-on {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-title);
+    line-height: var(--type-line-title);
+    font-weight: var(--type-weight-medium);
+    color: var(--home-state-on);
+  }
+
+  .type-home-state-off {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-title);
+    line-height: var(--type-line-title);
+    font-weight: var(--type-weight-medium);
+    color: var(--home-state-off);
+  }
+
+  .type-camera-direction-label {
+    font-family: var(--type-font-display);
+    font-size: var(--type-size-label);
+    font-weight: var(--type-weight-regular);
+    color: var(--home-title);
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "be-nest-module",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/be-nest-module/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/tools/be-nest-module",
+        "main": "tools/be-nest-module/src/index.ts",
+        "tsConfig": "tools/be-nest-module/tsconfig.lib.json",
+        "assets": [
+          "tools/be-nest-module/*.md",
+          {
+            "input": "./tools/be-nest-module/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./tools/be-nest-module/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./tools/be-nest-module",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./tools/be-nest-module",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    }
+  }
+}

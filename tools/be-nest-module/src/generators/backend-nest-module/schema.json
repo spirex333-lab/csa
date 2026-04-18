@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "backendNestModuleGenerator",
+  "title": "Backend Nest Module Generator",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name (used for folder, file, and class names).",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "directory": {
+      "type": "string",
+      "description": "Optional subdirectory below libs/backend for the new library."
+    },
+    "route": {
+      "type": "string",
+      "description": "HTTP route path for the controller."
+    },
+    "entity": {
+      "type": "string",
+      "description": "Primary TypeORM entity class name."
+    },
+    "entityImportPath": {
+      "type": "string",
+      "description": "Override the import path for the primary entity."
+    },
+    "dtoName": {
+      "type": "string",
+      "description": "DTO class used by the CRUD controller."
+    },
+    "dtoImportPath": {
+      "type": "string",
+      "description": "Import path for the DTO class."
+    },
+    "createDtoName": {
+      "type": "string",
+      "description": "Create DTO class wired to the main DTO."
+    },
+    "createDtoImportPath": {
+      "type": "string",
+      "description": "Import path for the create DTO class."
+    },
+    "updateDtoName": {
+      "type": "string",
+      "description": "Update DTO class used by the CRUD controller."
+    },
+    "updateDtoImportPath": {
+      "type": "string",
+      "description": "Import path for the update DTO class."
+    },
+    "relatedEntity": {
+      "type": "string",
+      "description": "Optional related entity to wire inside the service create/update overrides."
+    },
+    "relatedEntityImportPath": {
+      "type": "string",
+      "description": "Override the import path for the related entity."
+    },
+    "relatedEntityField": {
+      "type": "string",
+      "description": "Property name on the primary entity that references the related entity."
+    },
+    "relatedEntityIdProperty": {
+      "type": "string",
+      "description": "DTO property that carries the related entity identifier."
+    },
+    "importAlias": {
+      "type": "string",
+      "description": "Path alias that points to the generated library inside tsconfig.base.json."
+    }
+  },
+  "required": ["name"]
+}
