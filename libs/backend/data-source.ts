@@ -17,7 +17,7 @@ const AppDataSource = new DataSource({
   database,
   synchronize: false,
   logging: false,
-//   entities: ['libs/backend/**/src/**/*.entity.ts','libs/backend/**/src/**/*.entity.js'],
+  entities: ['libs/backend/**/src/**/*.entity.ts', 'libs/backend/**/src/**/*.entity.js'],
   migrations: ['libs/backend/migrations/*.ts','libs/backend/migrations/*.js'],
 });
 
