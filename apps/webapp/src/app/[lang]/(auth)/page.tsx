@@ -7,7 +7,7 @@ export default async function Index({ params }: { params: Promise<{ lang: string
   const token = (await cookies()).get('token')?.value;
 
   if (!token) {
-    redirect(`/${lang}/login`);
+    // redirect(`/${lang}/login`);
   }
 
   return <></>;

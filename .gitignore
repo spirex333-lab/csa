@@ -75,3 +75,6 @@ storage
 storybook-static
 *.out
 ./**/*.out
+
+.playwright-mcp
+.next

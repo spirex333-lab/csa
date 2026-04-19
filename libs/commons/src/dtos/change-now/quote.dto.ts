@@ -8,6 +8,7 @@ export class QuoteRequestDto {
 
 export class QuoteResponseDto {
   fromAmount!: number;
+  /** Mapped from API's toAmount field (v2) */
   toAmount!: number;
   rateId?: string;
   validUntil?: string;

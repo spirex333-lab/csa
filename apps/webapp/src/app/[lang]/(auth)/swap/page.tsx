@@ -8,7 +8,9 @@ import { SwapPanel, RateDisplay } from '@workspace/eds/swap';
 import { Button } from '@workspace/eds';
 import { Input } from '@workspace/eds';
 import { RateType } from '@workspace/commons/dtos/change-now/create-order.dto';
-
+import Image from 'next/image';
+import logo from '../../../../../public/logo.svg';
+import { AppLogo } from '@webapp/components/common/logo';
 export default function SwapPage() {
   const {
     form,
@@ -70,21 +72,27 @@ export default function SwapPage() {
   );
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-100 p-6">
-      <div className="w-full max-w-3xl">
+    <div
+      style={{ backgroundImage: 'url(/landing-bg.webp)' }}
+      className="bg-cover bg-size-[50%] flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-100 p-6"
+    >
+      <div className="w-full max-w-5xl">
         {/* Hero */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 flex flex-col items-center text-center text-purple-700 ">
+          <div className="w-20">
+            <AppLogo />
+          </div>
+          {/* <Image src={logo} width={250} height={200} alt="Logo" className="mx-auto mb-4 h-20 w-auto" /> */}
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            Instant Crypto Exchange
+            Swap Pilot
           </h1>
-          <p className="mt-1.5 text-sm text-slate-500">
-            Non-custodial · No registration · Powered by ChangeNow
-          </p>
+          <h3 className="text-base font-medium tracking-tight text-slate-500">
+            Get the best exchange rates from Trusted Crypto Swap Platforms
+          </h3>
         </div>
 
         <div className="rounded-3xl bg-white p-8 shadow-2xl shadow-indigo-100/60 ring-1 ring-slate-100">
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
-
             {/* ── Row 1: Send ⇄ Receive ── */}
             <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start">
               <SwapPanel
@@ -118,9 +126,7 @@ export default function SwapPage() {
               />
             </div>
 
-            {quoteError && (
-              <p className="text-xs text-red-500">{quoteError}</p>
-            )}
+            {quoteError && <p className="text-xs text-red-500">{quoteError}</p>}
 
             {/* ── Row 2: Destination address ── */}
             <div className="flex flex-col gap-2">
@@ -195,12 +201,11 @@ export default function SwapPage() {
                 disabled={
                   isSubmitting || !fromCurrency || !toCurrency || !quote
                 }
-                className="h-12 rounded-2xl bg-indigo-600 px-8 text-base font-semibold tracking-wide shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 hover:shadow-indigo-300 disabled:opacity-40"
+                className="h-12 rounded-2xl bg-indigo-600 px-8 text-white text-base font-semibold tracking-wide shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 hover:shadow-indigo-300 disabled:opacity-40"
               >
                 {isSubmitting ? 'Creating order…' : 'Exchange now →'}
               </Button>
             </div>
-
           </form>
         </div>
       </div>
