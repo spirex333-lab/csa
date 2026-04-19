@@ -9,4 +9,3 @@ export * from './change-now.entity';
 export * from './order-event.entity';
 export * from './supported-asset.entity';
 export * from './affiliate-code.entity';
-export * from './ffio.entity';
