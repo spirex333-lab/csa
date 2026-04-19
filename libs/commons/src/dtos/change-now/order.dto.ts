@@ -1,4 +1,5 @@
 export enum OrderStatus {
+  NEW = 'new',
   WAITING = 'waiting',
   CONFIRMING = 'confirming',
   EXCHANGING = 'exchanging',
@@ -6,7 +7,7 @@ export enum OrderStatus {
   FINISHED = 'finished',
   FAILED = 'failed',
   REFUNDED = 'refunded',
-  EXPIRED = 'expired',
+  VERIFYING = 'verifying',
 }
 
 export class OrderDto {
@@ -25,8 +26,13 @@ export class OrderDto {
 export class OrderStatusDto {
   id!: string;
   status!: OrderStatus;
-  fromAmount!: number;
+  /** Amount sent by user (amountSend in API response) */
+  fromAmount?: number;
+  /** Amount received (amountReceive in API response) */
   toAmount?: number;
+  expectedSendAmount?: number;
+  expectedReceiveAmount?: number;
   depositAddress!: string;
+  payoutAddress?: string;
   updatedAt!: string;
 }
