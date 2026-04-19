@@ -16,7 +16,6 @@ import {
   CommandItem,
   CommandList,
 } from '@workspace/ui/command';
-import { Badge } from '@workspace/ui/badge';
 import { CurrencyDto } from '@workspace/commons/dtos/change-now/currency.dto';
 
 export type SwapPanelProps = {
@@ -91,20 +90,20 @@ export function SwapPanel({
                   {currency.image ? (
                     <img
                       src={currency.image}
-                      alt={currency.ticker}
+                      alt={currency.canonicalTicker}
                       className="h-7 w-7 rounded-full shadow-sm"
                     />
                   ) : (
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-[10px] font-bold text-indigo-600">
-                      {currency.ticker.slice(0, 2).toUpperCase()}
+                      {currency.canonicalTicker.slice(0, 2).toUpperCase()}
                     </span>
                   )}
                   <span className="flex flex-col items-start leading-none">
                     <span className="text-sm font-bold text-slate-800">
-                      {currency.ticker.toUpperCase()}
+                      {currency.label}
                     </span>
                     <span className="mt-0.5 text-[10px] text-slate-400">
-                      {currency.network.toUpperCase()}
+                      {currency.network}
                     </span>
                   </span>
                 </>
@@ -124,8 +123,8 @@ export function SwapPanel({
                 <CommandGroup>
                   {currencies.map((coin) => (
                     <CommandItem
-                      key={`${coin.ticker}-${coin.network}`}
-                      value={`${coin.ticker} ${coin.name} ${coin.network}`}
+                      key={coin.canonicalTicker}
+                      value={`${coin.canonicalTicker} ${coin.label}`}
                       onSelect={() => {
                         onCurrencyChange(coin);
                         setOpen(false);
@@ -136,33 +135,26 @@ export function SwapPanel({
                         {coin.image ? (
                           <img
                             src={coin.image}
-                            alt={coin.ticker}
+                            alt={coin.canonicalTicker}
                             className="h-8 w-8 rounded-full"
                           />
                         ) : (
                           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-600">
-                            {coin.ticker.slice(0, 2).toUpperCase()}
+                            {coin.canonicalTicker.slice(0, 2).toUpperCase()}
                           </span>
                         )}
                         <span className="flex flex-col">
                           <span className="text-sm font-semibold text-slate-800">
-                            {coin.ticker.toUpperCase()}
+                            {coin.label}
                           </span>
                           <span className="text-xs text-slate-400">
-                            {coin.name}
+                            {coin.network}
                           </span>
                         </span>
-                        <Badge
-                          variant="secondary"
-                          className="ml-auto px-1.5 py-0 text-[10px]"
-                        >
-                          {coin.network.toUpperCase()}
-                        </Badge>
                       </span>
-                      {currency?.ticker === coin.ticker &&
-                        currency?.network === coin.network && (
-                          <Check size={14} className="ml-2 text-indigo-500" />
-                        )}
+                      {currency?.canonicalTicker === coin.canonicalTicker && (
+                        <Check size={14} className="ml-2 text-indigo-500" />
+                      )}
                     </CommandItem>
                   ))}
                 </CommandGroup>

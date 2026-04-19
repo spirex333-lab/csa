@@ -58,10 +58,10 @@ function validateXmr(address: string): boolean {
 }
 
 const VALIDATORS: Record<string, (address: string) => boolean> = {
+  // Canonical keys (used by CreateOrderDto.toCanonical)
   btc: validateBtc,
   eth: validateEth,
-  usdt: validateEth,       // ERC20 USDT uses ETH addresses
-  usdttrc20: validateTrc20,
+  usdt_erc20: validateEth,
   usdt_trc20: validateTrc20,
   sol: validateSol,
   xmr: validateXmr,

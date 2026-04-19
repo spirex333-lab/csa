@@ -20,7 +20,7 @@ export class SwapRouterService {
     private readonly orderRepo: Repository<ChangeNow>,
   ) {}
 
-  async getCurrencies(): Promise<CurrencyDto[]> {
+  getCurrencies(): CurrencyDto[] {
     return this.changeNow.getCurrencies();
   }
 
@@ -70,7 +70,7 @@ export class SwapRouterService {
     const ffOk = ff.status === 'fulfilled' ? ff.value : null;
 
     if (!cnOk && !ffOk) {
-      throw new Error(`Both providers failed for ${req.fromCurrency}→${req.toCurrency}`);
+      throw new Error(`Both providers failed for ${req.fromCanonical}→${req.toCanonical}`);
     }
     if (!cnOk) return ffOk!;
     if (!ffOk) return cnOk;

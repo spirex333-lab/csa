@@ -50,13 +50,11 @@ export default function SwapPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        fromCurrency: fromCurrency.ticker,
-        toCurrency: toCurrency.ticker,
+        fromCanonical: fromCurrency.canonicalTicker,
+        toCanonical: toCurrency.canonicalTicker,
         fromAmount: parseFloat(values.fromAmount),
         toAddress: values.toAddress,
         rateType,
-        fromNetwork: fromCurrency.network,
-        toNetwork: toCurrency.network,
         rateId: quote?.rateId,
       }),
     });
@@ -66,8 +64,8 @@ export default function SwapPage() {
     <RateDisplay
       quote={quote}
       loading={quoteLoading}
-      fromTicker={fromCurrency?.ticker}
-      toTicker={toCurrency?.ticker}
+      fromTicker={fromCurrency?.canonicalTicker}
+      toTicker={toCurrency?.canonicalTicker}
     />
   );
 
@@ -134,14 +132,14 @@ export default function SwapPage() {
                 Destination address
                 {toCurrency && (
                   <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-normal text-slate-500">
-                    {toCurrency.ticker.toUpperCase()}
+                    {toCurrency.canonicalTicker}
                   </span>
                 )}
               </label>
               <Input
                 placeholder={
                   toCurrency
-                    ? `Your ${toCurrency.ticker.toUpperCase()} address`
+                    ? `Your ${toCurrency.canonicalTicker} address`
                     : 'Enter recipient wallet address'
                 }
                 {...register('toAddress', {

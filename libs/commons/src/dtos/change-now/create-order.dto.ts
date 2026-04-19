@@ -7,13 +7,15 @@ export enum RateType {
 }
 
 export class CreateOrderDto {
+  /** Canonical ticker, e.g. "BTC", "USDT_ERC20" */
   @IsString()
   @IsNotEmpty()
-  fromCurrency!: string;
+  fromCanonical!: string;
 
+  /** Canonical ticker, e.g. "ETH", "USDT_TRC20" */
   @IsString()
   @IsNotEmpty()
-  toCurrency!: string;
+  toCanonical!: string;
 
   @IsNumber()
   @Min(0)
@@ -21,19 +23,11 @@ export class CreateOrderDto {
 
   @IsString()
   @IsNotEmpty()
-  @IsValidWalletAddress('toCurrency')
+  @IsValidWalletAddress('toCanonical')
   toAddress!: string;
 
   @IsEnum(RateType)
   rateType!: RateType;
-
-  @IsString()
-  @IsOptional()
-  fromNetwork?: string;
-
-  @IsString()
-  @IsOptional()
-  toNetwork?: string;
 
   @IsString()
   @IsOptional()

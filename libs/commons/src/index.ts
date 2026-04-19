@@ -12,3 +12,4 @@ export * from './sockets';
 export * from './dtos';
 export * from './validation';
 export * from './matrix';
+export * from './currency-map';

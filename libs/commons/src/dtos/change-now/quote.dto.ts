@@ -1,14 +1,13 @@
 export class QuoteRequestDto {
-  fromCurrency!: string;
-  toCurrency!: string;
+  /** Canonical ticker, e.g. "BTC", "USDT_ERC20" */
+  fromCanonical!: string;
+  /** Canonical ticker, e.g. "ETH", "USDT_TRC20" */
+  toCanonical!: string;
   fromAmount!: number;
-  fromNetwork?: string;
-  toNetwork?: string;
 }
 
 export class QuoteResponseDto {
   fromAmount!: number;
-  /** Mapped from API's toAmount field (v2) */
   toAmount!: number;
   rateId?: string;
   validUntil?: string;
