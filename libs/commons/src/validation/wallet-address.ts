@@ -50,8 +50,8 @@ function validateXmr(address: string): boolean {
   if (address.length !== 95 && address.length !== 106) return false;
   try {
     const decoded = bs58.decode(address);
-    // Standard address decodes to 70 bytes, integrated to 77 bytes
-    return decoded.length === 70 || decoded.length === 77;
+    // Standard address decodes to 69 bytes, integrated to 77 bytes
+    return decoded.length === 69 || decoded.length === 77;
   } catch {
     return false;
   }

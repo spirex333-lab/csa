@@ -85,6 +85,8 @@ export class ChangeNowService {
         to: toCurrency,
         address: dto.toAddress,
         amount: String(dto.fromAmount),
+        ...(fromNetwork && { fromNetwork }),
+        ...(toNetwork && { toNetwork }),
         ...(dto.rateId && { rateId: dto.rateId }),
       });
     } else {

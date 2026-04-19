@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
-import { IsValidWalletAddress } from '@workspace/be-commons/decorators/is-valid-wallet-address.decorator';
+import { IsValidWalletAddress } from '@workspace/commons/validation/is-valid-wallet-address.decorator';
 
 export enum RateType {
   FLOAT = 'float',
