@@ -1,4 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsValidWalletAddress } from '@workspace/be-commons/decorators/is-valid-wallet-address.decorator';
 
 export enum RateType {
   FLOAT = 'float',
@@ -20,6 +21,7 @@ export class CreateOrderDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsValidWalletAddress('toCurrency')
   toAddress!: string;
 
   @IsEnum(RateType)
