@@ -7,6 +7,7 @@ import { CurrencyDto } from '@workspace/commons/dtos/change-now/currency.dto';
 import { QuoteRequestDto, QuoteResponseDto } from '@workspace/commons/dtos/change-now/quote.dto';
 import { CreateOrderDto, RateType } from '@workspace/commons/dtos/change-now/create-order.dto';
 import { OrderDto, OrderStatus, OrderStatusDto } from '@workspace/commons/dtos/change-now/order.dto';
+import { CURRENCY_MAP, SUPPORTED_TICKERS } from '@workspace/commons/currency-map';
 
 const BASE_URL = 'https://ff.io/api/v2';
 const MAX_RETRIES = 3;
@@ -51,31 +52,24 @@ export class FfioService {
     this.apiSecret = process.env['FFIO_API_SECRET'] ?? '';
   }
 
-  async getCurrencies(): Promise<CurrencyDto[]> {
-    const raw = await this.call<FfioCurrency[]>('/ccies', {});
-    return raw.map((c) => ({
-      ticker: c.code,
-      name: c.name,
-      image: c.logo ?? '',
-      network: c.network ?? c.coin,
-      hasExternalId: false,
-      isExtraIdSupported: false,
-      isFiat: false,
-      featured: false,
-      isStable: false,
-      supportsFixedRate: true,
-      tokenContract: null,
-      buy: c.recv,
-      sell: c.send,
-      legacyTicker: c.code,
+  getCurrencies(): CurrencyDto[] {
+    return SUPPORTED_TICKERS.map((canonical) => ({
+      canonicalTicker: canonical,
+      label: CURRENCY_MAP[canonical].label,
+      image: CURRENCY_MAP[canonical].image,
+      network: CURRENCY_MAP[canonical].network,
+      buy: true,
+      sell: true,
     }));
   }
 
   async getFloatQuote(req: QuoteRequestDto): Promise<QuoteResponseDto> {
+    const fromCcy = this.toFfioCode(req.fromCanonical);
+    const toCcy = this.toFfioCode(req.toCanonical);
     const data = await this.call<FfioPriceData>('/price', {
       type: 'float',
-      fromCcy: req.fromCurrency,
-      toCcy: req.toCurrency,
+      fromCcy,
+      toCcy,
       direction: 'from',
       amount: req.fromAmount,
     });
@@ -90,10 +84,12 @@ export class FfioService {
   }
 
   async getFixedQuote(req: QuoteRequestDto): Promise<QuoteResponseDto> {
+    const fromCcy = this.toFfioCode(req.fromCanonical);
+    const toCcy = this.toFfioCode(req.toCanonical);
     const data = await this.call<FfioPriceData>('/price', {
       type: 'fixed',
-      fromCcy: req.fromCurrency,
-      toCcy: req.toCurrency,
+      fromCcy,
+      toCcy,
       direction: 'from',
       amount: req.fromAmount,
     });
@@ -108,18 +104,20 @@ export class FfioService {
   }
 
   async createOrder(dto: CreateOrderDto): Promise<OrderDto> {
+    const fromCcy = this.toFfioCode(dto.fromCanonical);
+    const toCcy = this.toFfioCode(dto.toCanonical);
     const data = await this.call<FfioOrderData>('/create', {
       type: dto.rateType === RateType.FIXED ? 'fixed' : 'float',
-      fromCcy: dto.fromCurrency,
-      toCcy: dto.toCurrency,
+      fromCcy,
+      toCcy,
       direction: 'from',
       amount: dto.fromAmount,
       toAddress: dto.toAddress,
     });
 
     const order = this.orderRepo.create({
-      fromCurrency: dto.fromCurrency,
-      toCurrency: dto.toCurrency,
+      fromCurrency: dto.fromCanonical,
+      toCurrency: dto.toCanonical,
       fromAmount: dto.fromAmount,
       depositAddress: data.from.address,
       toAddress: dto.toAddress,
@@ -133,8 +131,8 @@ export class FfioService {
 
     return {
       id: data.id,
-      fromCurrency: dto.fromCurrency,
-      toCurrency: dto.toCurrency,
+      fromCurrency: dto.fromCanonical,
+      toCurrency: dto.toCanonical,
       fromAmount: dto.fromAmount,
       expectedToAmount: parseFloat(data.to.amount),
       depositAddress: data.from.address,
@@ -164,6 +162,15 @@ export class FfioService {
       payoutAddress: data.to.address,
       updatedAt: new Date(data.time.update * 1000).toISOString(),
     };
+  }
+
+  /** Translate canonical ticker to ff.io currency code. Throws 400 if unsupported. */
+  private toFfioCode(canonical: string): string {
+    const entry = CURRENCY_MAP[canonical];
+    if (!entry) {
+      throw new HttpException(`Unsupported currency: ${canonical}`, 400);
+    }
+    return entry.ffio.code;
   }
 
   private mapStatus(raw: string): OrderStatus {

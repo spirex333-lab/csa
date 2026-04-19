@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
-
-const API_BASE = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:8002/api';
-
-const ALLOWED_TICKERS = new Set(['btc', 'eth', 'usdt', 'bnb', 'sol', 'xrp']);
+import { CURRENCY_MAP, SUPPORTED_TICKERS } from '@workspace/commons/currency-map';
+import { CurrencyDto } from '@workspace/commons/dtos/change-now/currency.dto';
 
 export async function GET() {
-  const res = await fetch(`${API_BASE}/change-now/currencies`, {
-    next: { revalidate: 900 },
-  });
-  if (!res.ok) return NextResponse.json({ error: 'Failed to fetch currencies' }, { status: res.status });
-  const data: { ticker: string }[] = await res.json();
-  const filtered = data.filter((c) => ALLOWED_TICKERS.has(c.ticker.toLowerCase()));
-  return NextResponse.json(filtered, {
+  const currencies: CurrencyDto[] = SUPPORTED_TICKERS.map((canonical) => ({
+    canonicalTicker: canonical,
+    label: CURRENCY_MAP[canonical].label,
+    image: CURRENCY_MAP[canonical].image,
+    network: CURRENCY_MAP[canonical].network,
+    buy: true,
+    sell: true,
+  }));
+  return NextResponse.json(currencies, {
     headers: { 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=60' },
   });
 }

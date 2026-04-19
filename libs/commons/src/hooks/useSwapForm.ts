@@ -55,11 +55,9 @@ export function useSwapForm(): UseSwapFormReturn {
       try {
         const endpoint = rateType === RateType.FIXED ? 'fixed' : 'float';
         const params = new URLSearchParams({
-          fromCurrency: fromCurrency.ticker,
-          toCurrency: toCurrency.ticker,
+          fromCanonical: fromCurrency.canonicalTicker,
+          toCanonical: toCurrency.canonicalTicker,
           fromAmount,
-          fromNetwork: fromCurrency.network,
-          toNetwork: toCurrency.network,
         });
         const res = await fetch(`/api/swap/quote?type=${endpoint}&${params}`);
         if (!res.ok) throw new Error('Failed to fetch quote');

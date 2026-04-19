@@ -6,6 +6,7 @@ import { CurrencyDto } from '@workspace/commons/dtos/change-now/currency.dto';
 import { QuoteRequestDto, QuoteResponseDto } from '@workspace/commons/dtos/change-now/quote.dto';
 import { CreateOrderDto, RateType } from '@workspace/commons/dtos/change-now/create-order.dto';
 import { OrderDto, OrderStatus, OrderStatusDto } from '@workspace/commons/dtos/change-now/order.dto';
+import { CURRENCY_MAP, SUPPORTED_TICKERS } from '@workspace/commons/currency-map';
 
 const BASE_URL = 'https://api.changenow.io';
 const MAX_RETRIES = 3;
@@ -22,17 +23,26 @@ export class ChangeNowService {
     this.apiKey = process.env['CHANGENOW_API_KEY'] ?? '';
   }
 
-  async getCurrencies(): Promise<CurrencyDto[]> {
-    return this.get<CurrencyDto[]>('/v2/exchange/currencies', { active: 'true', flow: 'standard' });
+  getCurrencies(): CurrencyDto[] {
+    return SUPPORTED_TICKERS.map((canonical) => ({
+      canonicalTicker: canonical,
+      label: CURRENCY_MAP[canonical].label,
+      image: CURRENCY_MAP[canonical].image,
+      network: CURRENCY_MAP[canonical].network,
+      buy: true,
+      sell: true,
+    }));
   }
 
   async getFloatQuote(req: QuoteRequestDto): Promise<QuoteResponseDto> {
+    const { ticker: fromCurrency, network: fromNetwork } = this.toCnCode(req.fromCanonical);
+    const { ticker: toCurrency, network: toNetwork } = this.toCnCode(req.toCanonical);
     const data = await this.get<{ toAmount: number }>('/v2/exchange/estimated-amount', {
-      fromCurrency: req.fromCurrency,
-      toCurrency: req.toCurrency,
+      fromCurrency,
+      toCurrency,
       fromAmount: req.fromAmount,
-      ...(req.fromNetwork && { fromNetwork: req.fromNetwork }),
-      ...(req.toNetwork && { toNetwork: req.toNetwork }),
+      ...(fromNetwork && { fromNetwork }),
+      ...(toNetwork && { toNetwork }),
       flow: 'standard',
     });
     return {
@@ -43,12 +53,14 @@ export class ChangeNowService {
   }
 
   async getFixedQuote(req: QuoteRequestDto): Promise<QuoteResponseDto> {
+    const { ticker: fromCurrency, network: fromNetwork } = this.toCnCode(req.fromCanonical);
+    const { ticker: toCurrency, network: toNetwork } = this.toCnCode(req.toCanonical);
     const data = await this.get<{ toAmount: number; rateId?: string; validUntil?: string }>('/v2/exchange/estimated-amount', {
-      fromCurrency: req.fromCurrency,
-      toCurrency: req.toCurrency,
+      fromCurrency,
+      toCurrency,
       fromAmount: req.fromAmount,
-      ...(req.fromNetwork && { fromNetwork: req.fromNetwork }),
-      ...(req.toNetwork && { toNetwork: req.toNetwork }),
+      ...(fromNetwork && { fromNetwork }),
+      ...(toNetwork && { toNetwork }),
       flow: 'fixed-rate',
       useRateId: 'true',
     });
@@ -62,34 +74,36 @@ export class ChangeNowService {
   }
 
   async createOrder(dto: CreateOrderDto): Promise<OrderDto> {
+    const { ticker: fromCurrency, network: fromNetwork } = this.toCnCode(dto.fromCanonical);
+    const { ticker: toCurrency, network: toNetwork } = this.toCnCode(dto.toCanonical);
     type CreateResponse = { id: string; payinAddress: string; payoutAddress: string };
     let data: CreateResponse;
 
     if (dto.rateType === RateType.FIXED) {
-      // v1 fixed-rate: body fields are `from`, `to`, `address`, `amount`, `rateId`
       data = await this.post<CreateResponse>(`/v1/transactions/fixed-rate/${this.apiKey}`, {
-        from: dto.fromCurrency,
-        to: dto.toCurrency,
+        from: fromCurrency,
+        to: toCurrency,
         address: dto.toAddress,
         amount: String(dto.fromAmount),
+        ...(fromNetwork && { fromNetwork }),
+        ...(toNetwork && { toNetwork }),
         ...(dto.rateId && { rateId: dto.rateId }),
       });
     } else {
-      // v2 standard (float) exchange
       data = await this.post<CreateResponse>('/v2/exchange', {
-        fromCurrency: dto.fromCurrency,
-        toCurrency: dto.toCurrency,
+        fromCurrency,
+        toCurrency,
         fromAmount: dto.fromAmount,
         address: dto.toAddress,
         flow: 'standard',
-        ...(dto.fromNetwork && { fromNetwork: dto.fromNetwork }),
-        ...(dto.toNetwork && { toNetwork: dto.toNetwork }),
+        ...(fromNetwork && { fromNetwork }),
+        ...(toNetwork && { toNetwork }),
       });
     }
 
     const order = this.orderRepo.create({
-      fromCurrency: dto.fromCurrency,
-      toCurrency: dto.toCurrency,
+      fromCurrency: dto.fromCanonical,
+      toCurrency: dto.toCanonical,
       fromAmount: dto.fromAmount,
       depositAddress: data.payinAddress,
       toAddress: dto.toAddress,
@@ -101,8 +115,8 @@ export class ChangeNowService {
 
     return {
       id: data.id,
-      fromCurrency: dto.fromCurrency,
-      toCurrency: dto.toCurrency,
+      fromCurrency: dto.fromCanonical,
+      toCurrency: dto.toCanonical,
       fromAmount: dto.fromAmount,
       expectedToAmount: 0,
       depositAddress: data.payinAddress,
@@ -114,7 +128,6 @@ export class ChangeNowService {
   }
 
   async getOrderStatus(externalId: string): Promise<OrderStatusDto> {
-    // v1 endpoint: GET /v1/transactions/:id/:api_key
     type StatusResponse = {
       id: string;
       status: OrderStatus;
@@ -127,9 +140,7 @@ export class ChangeNowService {
       updatedAt: string;
     };
     const data = await this.get<StatusResponse>(`/v1/transactions/${externalId}/${this.apiKey}`, {});
-
     await this.orderRepo.update({ externalId }, { status: data.status });
-
     return {
       id: externalId,
       status: data.status,
@@ -141,6 +152,15 @@ export class ChangeNowService {
       payoutAddress: data.payoutAddress,
       updatedAt: data.updatedAt ?? new Date().toISOString(),
     };
+  }
+
+  /** Translate canonical ticker to ChangeNow ticker + optional network. Throws 400 if unsupported. */
+  private toCnCode(canonical: string): { ticker: string; network?: string } {
+    const entry = CURRENCY_MAP[canonical];
+    if (!entry) {
+      throw new HttpException(`Unsupported currency: ${canonical}`, 400);
+    }
+    return { ticker: entry.changenow.ticker, network: entry.changenow.network };
   }
 
   private async get<T>(path: string, params: Record<string, unknown> = {}): Promise<T> {

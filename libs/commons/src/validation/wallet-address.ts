@@ -50,18 +50,18 @@ function validateXmr(address: string): boolean {
   if (address.length !== 95 && address.length !== 106) return false;
   try {
     const decoded = bs58.decode(address);
-    // Standard address decodes to 70 bytes, integrated to 77 bytes
-    return decoded.length === 70 || decoded.length === 77;
+    // Standard address decodes to 69 bytes, integrated to 77 bytes
+    return decoded.length === 69 || decoded.length === 77;
   } catch {
     return false;
   }
 }
 
 const VALIDATORS: Record<string, (address: string) => boolean> = {
+  // Canonical keys (used by CreateOrderDto.toCanonical)
   btc: validateBtc,
   eth: validateEth,
-  usdt: validateEth,       // ERC20 USDT uses ETH addresses
-  usdttrc20: validateTrc20,
+  usdt_erc20: validateEth,
   usdt_trc20: validateTrc20,
   sol: validateSol,
   xmr: validateXmr,

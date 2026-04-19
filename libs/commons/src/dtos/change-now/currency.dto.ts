@@ -1,16 +1,9 @@
 export class CurrencyDto {
-  ticker!: string;
-  name!: string;
-  image!: string;
+  /** App-internal canonical key, e.g. "BTC", "USDT_ERC20" */
+  canonicalTicker!: string;
+  label!: string;
   network!: string;
-  hasExternalId!: boolean;
-  isExtraIdSupported!: boolean;
-  isFiat!: boolean;
-  featured!: boolean;
-  isStable!: boolean;
-  supportsFixedRate!: boolean;
-  tokenContract!: string | null;
+  image!: string;
   buy!: boolean;
   sell!: boolean;
-  legacyTicker!: string;
 }
