@@ -34,4 +34,10 @@ export class ChangeNow extends BaseEntity<ChangeNow> {
 
   @Column({ type: 'varchar', length: 100 })
   externalId!: string;
+
+  @Column({ type: 'varchar', length: 32, default: 'changenow' })
+  provider!: string;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  orderToken?: string;
 }

@@ -39,6 +39,8 @@
       "@workspace/eds/*": ["libs/eds/src/*"],
       "@workspace/execution": ["libs/backend/execution/src/index.ts"],
       "@workspace/execution/*": ["libs/backend/execution/src/*"],
+      "@workspace/ffio": ["libs/backend/ffio/src/index.ts"],
+      "@workspace/ffio/*": ["libs/backend/ffio/src/*"],
       "@workspace/files-api/*": ["libs/backend/files/src/*"],
       "@workspace/icons/*": ["libs/icons/src/*"],
       "@workspace/icons/server": ["libs/icons/src/server.ts"],
