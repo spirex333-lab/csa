@@ -10,7 +10,8 @@
     "fe:ui:sb": "pnpm exec nx run eds-ui:storybook",
     "fe:webapp:tw": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch",
     "be:base:dev": "NX_DAEMON=false pnpm exec nx run api:serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed:assets": "ts-node -r tsconfig-paths/register scripts/seed-supported-assets.ts"
   },
   "dependencies": {
     "@apollo/client": "^4.0.7",
