@@ -7,3 +7,4 @@ export * from './msg-queue.entity';
 export * from './tenant-membership.entity';
 export * from './change-now.entity';
 export * from './order-event.entity';
+export * from './supported-asset.entity';
