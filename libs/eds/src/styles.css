@@ -8,4 +8,16 @@
   html {
     font-family: theme('fontFamily.sans');
   }
+
+  :root {
+    --color-brand: 99 102 241;       /* indigo-500 */
+    --color-brand-dark: 129 140 248; /* indigo-400 */
+    --color-success: 16 185 129;     /* emerald-500 */
+    --color-warning: 245 158 11;     /* amber-500 */
+    --color-error: 239 68 68;        /* red-500 */
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
 }
