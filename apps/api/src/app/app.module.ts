@@ -7,6 +7,7 @@ import { FfioModule } from '@workspace/ffio';
 import { FilesModule } from '@workspace/files-api/lib/files.module';
 import { IPUALogModule } from '@workspace/ipualog';
 import { MysqlDbModule } from '@workspace/mysql-db';
+import { OrdersModule } from '@workspace/orders';
 import { SocketIoModule } from '@workspace/socket-io';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -21,6 +22,7 @@ import { AppService } from './app.service';
     FilesModule,
     AuthModule,
     IPUALogModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

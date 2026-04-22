@@ -52,6 +52,8 @@
       "@workspace/matrix/*": ["libs/backend/matrix/src/*"],
       "@workspace/mysql-db": ["libs/backend/mysql-db/src/index.ts"],
       "@workspace/mysql-db/*": ["libs/backend/mysql-db/src/*"],
+      "@workspace/orders": ["libs/backend/orders/src/index.ts"],
+      "@workspace/orders/*": ["libs/backend/orders/src/*"],
       "@workspace/queue": ["libs/backend/queue/src/index.ts"],
       "@workspace/queue/*": ["libs/backend/queue/src/*"],
       "@workspace/socket-io": ["libs/backend/socket-io/src/index.ts"],
