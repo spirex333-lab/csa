@@ -23,12 +23,31 @@ export class CreateOrders20260422 implements MigrationInterface {
         \`workspace\` varchar(128) NULL,
         PRIMARY KEY (\`id\`),
         INDEX \`IDX_orders_externalId\` (\`externalId\`),
-        INDEX \`IDX_orders_status\` (\`status\`)
+        INDEX \`IDX_orders_status\` (\`status\`),
+        INDEX \`IDX_orders_tenantId\` (\`tenantId\`),
+        CONSTRAINT \`FK_orders_tenant\` FOREIGN KEY (\`tenantId\`)
+          REFERENCES \`user\` (\`id\`) ON DELETE SET NULL
       ) ENGINE=InnoDB
+    `);
+
+    // Add nullable FK from order_events to the new orders table so lifecycle
+    // events can reference the internal order record, not just the provider record.
+    await queryRunner.query(`
+      ALTER TABLE \`order_events\`
+        ADD COLUMN IF NOT EXISTS \`internalOrderId\` varchar(36) NULL,
+        ADD INDEX \`IDX_order_events_internalOrderId\` (\`internalOrderId\`),
+        ADD CONSTRAINT \`FK_order_events_internal_order\`
+          FOREIGN KEY (\`internalOrderId\`) REFERENCES \`orders\` (\`id\`) ON DELETE SET NULL
     `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      ALTER TABLE \`order_events\`
+        DROP FOREIGN KEY \`FK_order_events_internal_order\`,
+        DROP INDEX \`IDX_order_events_internalOrderId\`,
+        DROP COLUMN \`internalOrderId\`
+    `);
     await queryRunner.query(`DROP TABLE IF EXISTS \`orders\``);
   }
 }

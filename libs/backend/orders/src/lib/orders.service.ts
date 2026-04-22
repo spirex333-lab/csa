@@ -25,6 +25,8 @@ export class OrdersService {
   async createOrder(dto: CreateOrdersDto): Promise<OrdersDto> {
     const providerOrder = await this.swapRouter.createOrder(dto);
 
+    // Both ChangeNowService and FfioService persist to change_now_orders before
+    // returning, so this lookup is guaranteed to find a record.
     const changeNowRecord = await this.changeNowRepo.findOneOrFail({
       where: { externalId: providerOrder.id },
     });
@@ -47,6 +49,7 @@ export class OrdersService {
     await this.eventRepo.save(
       this.eventRepo.create({
         order: changeNowRecord,
+        internalOrder: order,
         eventType: 'order_created',
         payload: { orderId: order.id, provider: order.provider },
       }),
@@ -67,6 +70,7 @@ export class OrdersService {
       id: order.id,
       fromCanonical: order.fromCanonical,
       toCanonical: order.toCanonical,
+      // MySQL decimal columns are returned as strings by the driver — cast explicitly
       fromAmount: Number(order.fromAmount),
       expectedToAmount: order.expectedToAmount != null ? Number(order.expectedToAmount) : undefined,
       depositAddress: order.depositAddress,
